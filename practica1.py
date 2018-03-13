@@ -31,6 +31,13 @@ class aleat(webApp):
 			urls.close()
 		if request.split(" ")[0] == "GET":
 			if request.split(" ")[1] == "/":
+				try:
+					urlList = urlList.split(',')
+					cleanList = ''
+					for url in urlList:
+						cleanList = cleanList + url
+				except IndexError:
+					pass
 				return ("200 OK",
 				'<html>'
 					'<body>'
@@ -40,7 +47,7 @@ class aleat(webApp):
 							'<input type="submit" value="Acortar">'
 						'</form>'
 						'<h2>Lista de URLs acortadas:</h2>' +
-						urlList +
+						cleanList +
 					'</body>'
 				'</html>')
 			elif request.split(" ")[1] == "/favicon.ico":
