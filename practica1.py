@@ -14,17 +14,20 @@ class aleat(webApp):
 
 	def process(self, request):
 		try:
-			urls = open('urls.txt', 'r')
+			urls = open('urls.csv', 'r')
 			urlList = urls.read()
 			urls.close()
 			try:
 				count = int(urlList.split('/')[-2].split('<')[0]) + 1
+				first = 0
 			except IndexError:
 				count = 0
+				first = 1
 		except IOError:
-			urls = open('urls.txt', 'w')
+			urls = open('urls.csv', 'w')
 			urlList = ''
 			count = 0
+			first = 1
 			urls.close()
 		if request.split(" ")[0] == "GET":
 			if request.split(" ")[1] == "/":
@@ -61,7 +64,9 @@ class aleat(webApp):
 				if url not in urlList:
 					link = "localhost:1234/" + str(count)
 					count = count + 1
-					urls = open('urls.txt', 'a')
+					urls = open('urls.csv', 'a')
+					if first == 0:
+						urls.write(',')
 					urls.write(
 						'<b>URL</b>: '
 						'<a href=' + url + '>' + url + '</a>'
@@ -69,7 +74,7 @@ class aleat(webApp):
 						'<a href=' + url + '>' + link + '</a><br>')
 					urls.close()
 				else:
-					urls = open('urls.txt', 'r')
+					urls = open('urls.csv', 'r')
 					link = urlList.split(url + '>')[-1].split('<')[0]
 					urls.close()
 				return("200 OK",
